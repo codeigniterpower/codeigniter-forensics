@@ -43,6 +43,7 @@ class CI_Profiler extends CI_Loader {
 										'controller_info',
 										'queries',
 										'eloquent',
+                                        'zend',
 										'http_headers',
 										'config',
 										'files',
@@ -222,6 +223,59 @@ class CI_Profiler extends CI_Loader {
 	}
 	
 	
+	// --------------------------------------------------------------------
+
+	/**
+	 * Compile Zend Queries
+     * http://framework.zend.com/manual/1.12/fr/zend.db.profiler.html
+	 *
+	 * @return	string
+	 */
+	protected function _compile_zend()
+	{
+		$output = array();
+		
+        $db = Zend_Registry::get('db');
+        $profileur = $db->getProfiler();
+        if ($profileur->getEnabled() === false ) {
+            $output = 'Zend_Db_Profiler has not been activated';
+		} else {
+			// Load the text helper so we can highlight the SQL
+			$this->CI->load->helper('text');
+
+			// Key words we want bolded
+			$highlight = array('CONNECT', 'DESCRIBE', 'SELECT', 'DISTINCT', 'FROM', 'WHERE', 'AND', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY', 'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;', 'HAVING', 'OFFSET', 'NOT&nbsp;IN', 'IN', 'LIKE', 'NOT&nbsp;LIKE', 'COUNT', 'MAX', 'MIN', '&nbsp;ON', 'AS', 'AVG', 'SUM', '(', ')');
+		
+		
+			$total = 0; // total query time
+			$queries = $profileur->getQueryProfiles();
+			foreach ($queries as $q)
+			{
+				$time = number_format($q->getElapsedSecs(), 4);
+				$total += $q->getElapsedSecs();
+			
+				$query = $q->getQuery();
+				foreach ($highlight as $bold)
+					$query = str_ireplace($bold, '<b>'.$bold.'</b>', $query);
+			
+				$output[][$time] = $query;
+			}
+
+			if(count($output) == 0)
+			{
+				$output = $this->CI->lang->line('profiler_no_queries');
+			}
+			else
+			{
+				$total = number_format($total, 4);
+				$output[][$total] = 'Total Query Execution Time';
+			}
+		}
+
+		return $output;
+	}
+    
+    
 	// --------------------------------------------------------------------
 
 	/**

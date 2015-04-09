@@ -34,6 +34,7 @@
 	#ci-profiler-menu-time span, #ci-profiler-benchmarks h2 { color: #B72F09; }
 	#ci-profiler-menu-memory span, #ci-profiler-memory h2 { color: #953FA1; }
 	#ci-profiler-menu-queries span, #ci-profiler-queries h2 { color: #3769A0; }
+    #ci-profiler-menu-zend span, #ci-profiler-zend h2 { color: #f4726d; }
 	#ci-profiler-menu-eloquent span, #ci-profiler-eloquent h2 { color: #f4726d; }
 	#ci-profiler-menu-vars span, #ci-profiler-vars h2 { color: #D28C00; }
 	#ci-profiler-menu-files span, #ci-profiler-files h2 { color: #5a8616; }
@@ -210,6 +211,14 @@ window.onload = function() {
 			</a>
 		<?php endif; ?>
 		
+         <!-- Zend -->
+		<?php if (isset($sections['zend'])) : ?>
+			<a href="#" id="ci-profiler-menu-zend" onclick="ci_profiler_bar.show('ci-profiler-zend', 'ci-profiler-menu-zend'); return false;">
+				<span><?php echo is_array($sections['zend']) ? (count($sections['zend']) - 1) : 0 ?> Zend DB</span>
+				Database
+			</a>
+		<?php endif; ?>
+        
 		<!-- Eloquent -->
 		<?php if (isset($sections['eloquent'])) : ?>
 			<a href="#" id="ci-profiler-menu-eloquent" onclick="ci_profiler_bar.show('ci-profiler-eloquent', 'ci-profiler-menu-eloquent'); return false;">
@@ -349,6 +358,29 @@ window.onload = function() {
 		</div>
 	<?php endif; ?>
 
+    <!-- Zend -->
+	<?php if (isset($sections['zend'])) :?>
+		<div id="ci-profiler-zend" class="ci-profiler-box" style="display: none">
+			<h2>Zend DB</h2>
+
+			<?php if (is_array($sections['zend'])) : ?>
+
+				<table class="main" cellspacing="0">
+				<?php foreach ($sections['zend'] as $key => $queries) : ?>
+					<?php foreach ($queries as $time => $query): ?>
+						<tr><td class="hilight"><?php echo $time ?></td><td><?php echo $query ?></td></tr>
+					<?php endforeach; ?>
+				<?php endforeach; ?>
+				</table>
+
+			<?php else : ?>
+
+				<?php echo $sections['zend']; ?>
+
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+    
 	<!-- Eloquent -->
 	<?php if (isset($sections['eloquent'])) :?>
 		<div id="ci-profiler-eloquent" class="ci-profiler-box" style="display: none">
