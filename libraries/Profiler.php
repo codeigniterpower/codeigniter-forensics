@@ -249,17 +249,19 @@ class CI_Profiler extends CI_Loader {
 		
 			$total = 0; // total query time
 			$queries = $profileur->getQueryProfiles();
-			foreach ($queries as $q)
-			{
-				$time = number_format($q->getElapsedSecs(), 4);
-				$total += $q->getElapsedSecs();
-			
-				$query = $q->getQuery();
-				foreach ($highlight as $bold)
-					$query = str_ireplace($bold, '<b>'.$bold.'</b>', $query);
-			
-				$output[][$time] = $query;
-			}
+            if ($queries) {
+                foreach ($queries as $q)
+                {
+                    $time = number_format($q->getElapsedSecs(), 4);
+                    $total += $q->getElapsedSecs();
+                
+                    $query = $q->getQuery();
+                    foreach ($highlight as $bold)
+                        $query = str_ireplace($bold, '<b>'.$bold.'</b>', $query);
+                
+                    $output[][$time] = $query;
+                }
+            }
 
 			if(count($output) == 0)
 			{
