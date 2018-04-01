@@ -15,6 +15,7 @@ $config['memory_usage']         = TRUE;
 $config['post']                 = TRUE;
 $config['queries']              = TRUE;
 $config['eloquent']             = FALSE;
+$config['zend']                 = FALSE;
 $config['uri_string']           = TRUE;
 $config['view_data']            = TRUE;
 $config['query_toggle_count']   = 50;
