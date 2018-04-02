@@ -252,7 +252,7 @@ class CI_Profiler extends CI_Loader {
 			$this->CI->load->model('Eloquent/Assets/Action');
 		}
 
-		if ( ! class_exists('Illuminate\Database\Capsule\Manager')) {
+		if ( ! class_exists('Illuminate\Database\Capsule\Manager', FALSE)) {
 			$output = 'Illuminate\Database has not been loaded.';
 		} else {
 			// Load the text helper so we can highlight the SQL
@@ -421,7 +421,7 @@ class CI_Profiler extends CI_Loader {
 	 */
 	protected function _compile_controller_info()
 	{
-		$output = $this->CI->router->fetch_class()."/".$this->CI->router->fetch_method();
+		$output = $this->CI->router->class."/".$this->CI->router->method;
 
 		return $output;
 	}
@@ -549,16 +549,19 @@ class CI_Profiler extends CI_Loader {
 				{
 					if (is_numeric($key))
 					{
-						$output[$key] = "'$val'";
+						$output[$key] = print_r($val,true);
 					}
 
 					if (is_array($val) || is_object($val))
 					{
-						$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
+						if (is_object($val))
+							$output[$key] = json_decode(json_encode($val), true);
+						else
+							$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
 					}
 					else
 					{
-						$output[$key] = htmlspecialchars(stripslashes($val));
+						$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
 					}
 				}
 			}
