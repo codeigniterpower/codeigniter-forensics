@@ -18,6 +18,12 @@ for the CodeIgniter Profiler.
 
 ## INSTALLING
 
+Comes included with CodeigniterPowered, but for CI 2 or CI3:
+
+**Requirements**
+
+* Codeigniter 2.x or 3.x
+
 **Manual controlled install**
 
 **1)** Located your Codeigniter proyect and then download the repository at the `Applications` root directory
@@ -38,31 +44,6 @@ for the CodeIgniter Profiler.
 Now the output wil be a **little flame at the botton right corner** on each load request/response, 
 click on it and see the new profiler.
 
-**Using composer/spark** 
-
-**1)** Create a `composer.json` file in your application's root with the following text in the new file: 
-
-```
-    {
-        "require": {
-            "codeigniterpower/codeigniter-profiler": "codeigniterpower-master"
-        }
-    }
-```
-
-**2)** Run composer or thanks to the magic of `compwright/composer-installers` the files are transferred 
-to your application's `third_party` folder. In your application, you will first need to load the newly 
-installed package.  This is  done easily through the autoloader, but could also be done in your controller 
-with an environment check for maximum optimization. 
-
-    $autoload['packages'] = array(APPPATH.'third_party/codeigniter-forensics');
-
-**3)** Then, just enable the profiler like normal.
-    
-`$this->output->enable_profiler(true);`
-
-Now the output wil be a **little flame at the botton right corner** on each load request/response, 
-click on it and see the new profiler.
 
 ## CONFIGURATION
 
