@@ -1,24 +1,25 @@
 {
-    "name": "lonnieezell/codeigniter-forensics",
-    "description": "A high-powered, customizable Profiler replacement for CodeIgniter.",
+    "name": "codeigniterpower/codeigniter-profiler",
+    "description": "Codeigniter powered profiler for normal codeigniters: A high-powered, customizable Profiler replacement for CodeIgniter.",
     "license": "MIT",
     "keywords": [
-        "codeigniter", "spark", "profiler", "debug"
+        "codeigniter", "spark", "profiler", "debug", "venenux", "linux", "php", "codeigniterpower"
     ],
     "authors": [
         {
-            "name": "Lonnie Ezell",
-            "email": "lonnieezell@gmail.com",
+            "name": "PICCORO Lenz McKAY",
+            "email": "mckaygerhard@gmail.com",
             "role": "Developer"
         }
     ],
-    "homepage": "http://lonnieezell.github.io/codeigniter-forensics/",
+    "homepage": "https://github.com/codeigniterpower/codeigniter-profiler",
     "support": {
-        "issues": "http://lonnieezell.github.io/codeigniter-forensics/issues",
-        "source": "http://lonnieezell.github.io/codeigniter-forensics/"
+        "issues": "https://github.com/codeigniterpower/codeigniter-profiler/issues",
+        "source": "https://github.com/codeigniterpower/codeigniter-profiler/"
     },
     "type": "codeigniter-third-party",
     "require": {
-        "compwright/codeigniter-installers": "*"
+        "compwright/codeigniter-installers": "*",
+        "php": ">=5.3.0"
     }
 }
