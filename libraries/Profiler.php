@@ -175,7 +175,7 @@ class CI_Profiler extends CI_Loader {
 			{
 				if ($cobject instanceof CI_DB)
 				{
-					$dbs[$name] = $cobject;
+					$dbs[get_class($this->CI).'->'.$name] = $cobject;
 				}
 				elseif ($cobject instanceof CI_Model)
 				{
@@ -183,7 +183,7 @@ class CI_Profiler extends CI_Loader {
 					{
 						if ($mobject instanceof CI_DB)
 						{
-							$dbs[$mname] = $mobject;
+							$dbs[get_class($cobject).'->'.$mname] = $mobject;
 						}
 					}
 				}
@@ -216,7 +216,7 @@ class CI_Profiler extends CI_Loader {
 					$val = str_replace($bold, '<b>'. $bold .'</b>', $val);
 				}
 
-				$output[][$time] = $controler.':'.$db->database.' ' . $val; // there's a filter CI plugin, so must show controler name, tho mention on wich controler was exec the query if some filter was applied
+				$output[][$time] = '/*('.$controler.',Scheme:'.$db->database.')*/ ' . $val;
 			}
 
 		}
