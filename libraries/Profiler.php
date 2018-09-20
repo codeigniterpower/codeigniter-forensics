@@ -2,21 +2,21 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.3.3 or newer
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. 2016 lionell
  * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @link		https://codeigniterpower.github.io/codeigniter-profiler/
+ * @since		Version 2.0
  * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * CodeIgniter Profiler Class
+ * CodeIgniter powered Profiler Class library
  *
  * This class enables you to display benchmark, query, and other data
  * in order to help with debugging and optimization.
@@ -28,7 +28,7 @@
  * @subpackage	Libraries
  * @category	Libraries
  * @author		ExpressionEngine Dev Team
- * @link		http://codeigniter.com/user_guide/general/profiling.html
+ * @link		https://codeigniterpower.github.io/codeigniter-profiler/
  */
 class CI_Profiler extends CI_Loader {
 
@@ -70,6 +70,13 @@ class CI_Profiler extends CI_Loader {
 			unset($config['query_toggle_count']);
 		}
 
+		// Make sure the Console is loaded.
+		if (!class_exists('Console'))
+		{
+			$this->CI->load->library('Console');
+		}
+
+		$this->set_sections($config);
 		// default all sections to display
 		foreach ($this->_available_sections as $section)
 		{
@@ -78,14 +85,6 @@ class CI_Profiler extends CI_Loader {
 				$this->_compile_{$section} = TRUE;
 			}
 		}
-
-		// Make sure the Console is loaded.
-		if (!class_exists('Console'))
-		{
-			$this->CI->load->library('Console');
-		}
-
-		$this->set_sections($config);
 
 		// Strange hack to get access to the current
 		// vars in the CI_Loader class.
@@ -252,7 +251,7 @@ class CI_Profiler extends CI_Loader {
 			$this->CI->load->model('Eloquent/Assets/Action');
 		}
 
-		if ( ! class_exists('Illuminate\Database\Capsule\Manager', FALSE)) {
+		if ( ! class_exists('Illuminate\Database\Capsule\Manager')) { // TODO ruta iluminate y separador OS linux only
 			$output = 'Illuminate\Database has not been loaded.';
 		} else {
 			// Load the text helper so we can highlight the SQL
@@ -364,26 +363,49 @@ class CI_Profiler extends CI_Loader {
 	{
 		$output = array();
 
-		if (count($_POST) == 0)
+		if (count($_POST) == 0 AND $_FILES == 0)
 		{
 			$output = $this->CI->lang->line('profiler_no_post');
 		}
 		else
 		{
-			foreach ($_POST as $key => $val)
+			if (count($_POST) > 0)
+			{
+				foreach ($_POST as $key => $val)
+				{
+					if ( ! is_numeric($key))
+					{
+						$key = "'".$key."'";
+					}
+
+					if (is_array($val))
+					{
+						$output['&#36;_POST['. $key .']'] = '<pre>'. htmlspecialchars(stripslashes(print_r($val, TRUE))) . '</pre>';
+					}
+					else
+					{
+						$output['&#36;_POST['. $key .']'] = htmlspecialchars(stripslashes($val));
+					}
+				}
+			}
+			else
+				$output = $this->CI->lang->line('profiler_no_post');
+
+			if (count($_FILES) > 0)
+			foreach ($_FILES as $key => $val)
 			{
 				if ( ! is_numeric($key))
 				{
 					$key = "'".$key."'";
 				}
 
-				if (is_array($val))
+				if (is_array($val) OR is_object($val))
 				{
-					$output['&#36;_POST['. $key .']'] = '<pre>'. htmlspecialchars(stripslashes(print_r($val, TRUE))) . '</pre>';
+					$output['&#36;_POST[FILE'. $key .']'] =  '<pre>'.htmlspecialchars(stripslashes(print_r($val, TRUE))).'</pre>';
 				}
 				else
 				{
-					$output['&#36;_POST['. $key .']'] = htmlspecialchars(stripslashes($val));
+					$output['&#36;_POST[FILE'. $key .']'] = htmlspecialchars(stripslashes($val));
 				}
 			}
 		}
@@ -512,6 +534,10 @@ class CI_Profiler extends CI_Loader {
 
 	public function _compile_console()
 	{
+
+		// Make sure the Console is loaded.
+		$this->CI->load->library('Console');
+
 		$logs = Console::get_logs();
 
 		if ($logs['console'])
@@ -587,7 +613,7 @@ class CI_Profiler extends CI_Loader {
 		{
 			if (is_numeric($key))
 			{
-				$output[$key] = "'$val'";
+				$output[$key] = print_r($val,true);
 			}
 
 			if (is_array($val) || is_object($val))
