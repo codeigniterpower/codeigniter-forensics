@@ -618,7 +618,7 @@ class CI_Profiler extends CI_Loader {
 
 			if (is_array($val) || is_object($val))
 			{
-				$output[$key] = '<pre>' . htmlspecialchars(stripslashes(print_r($val, true))) . '</pre>';
+				$output[$key] = '<pre>' . print_r($val, true) . '</pre>';
 			}
 			else
 			{
